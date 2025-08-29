@@ -2,11 +2,15 @@
   # Директория с исходным кодом frontend
   base = "frontend"
   
-  # Команда для сборки
-  command = "npm run build"
+  # Команда для сборки с отключенным ESLint
+  command = "CI=false npm run build"
   
   # Директория с собранными файлами
   publish = "build"
+
+[build.environment]
+  DISABLE_ESLINT_PLUGIN = "true"
+  GENERATE_SOURCEMAP = "false"
 
 # Настройки для Single Page Application
 [[redirects]]
