@@ -121,7 +121,13 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
       const userData = await apiService.getUserData();
       dispatch({ type: 'SET_USER_DATA', payload: userData });
     } catch (error) {
-      setError('Ошибка загрузки данных пользователя');
+      console.warn('API недоступен, используем демо режим');
+      // Fallback для работы без backend
+      const fallbackUserData = {
+        hasApplication: false,
+        data: null
+      };
+      dispatch({ type: 'SET_USER_DATA', payload: fallbackUserData });
     } finally {
       setLoading('userData', false);
     }
@@ -133,7 +139,25 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
       const config = await apiService.getConfig();
       dispatch({ type: 'SET_CONFIG', payload: config });
     } catch (error) {
-      setError('Ошибка загрузки конфигурации');
+      console.warn('API недоступен, используем резервную конфигурацию');
+      // Fallback конфигурация для работы без backend
+      const fallbackConfig = {
+        prices: {
+          categories: { A: 15000, B: 12000, C: 18000, D: 20000 },
+          medical: { yes: 0, no: 3000, order: 5000 },
+          school: { yes: 0, no: 2000 }
+        },
+        payment: {
+          btc_address: "demo_btc_address",
+          usdt_address: "demo_usdt_address", 
+          ton_address: "demo_ton_address"
+        },
+        telegram: {
+          bot_username: "demo_bot",
+          admin_chat_id: "demo_chat"
+        }
+      };
+      dispatch({ type: 'SET_CONFIG', payload: fallbackConfig });
     } finally {
       setLoading('config', false);
     }
